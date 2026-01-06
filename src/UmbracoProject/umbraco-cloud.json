@@ -1,7 +1,17 @@
 {
   "Deploy": {
     "Project": {
-      "Workspaces": []
+      "Name": "mazeupseventeen",
+      "Alias": "mazeupseventeen",
+      "Id": "8b0524ad-40a0-452c-afe6-5b1e545f3521",
+      "Workspaces": [
+        {
+          "Id": "c4c87df4-6aef-4b7f-a81d-cda980c95f53",
+          "Name": "Live",
+          "Type": "live",
+          "Url": "https://mazeupseventeen.euwest01.umbraco.io"
+        }
+      ]
     },
     "Settings": {}
   },
