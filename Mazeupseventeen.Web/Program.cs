@@ -7,7 +7,7 @@ builder.CreateUmbracoBuilder()
     .Build();
 
 WebApplication app = builder.Build();
-
+// trigger deployment
 await app.BootUmbracoAsync();
 
 app.UseHttpsRedirection();
