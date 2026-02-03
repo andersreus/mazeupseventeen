@@ -1,3 +1,5 @@
+using Mazeupseventeen.Core.Extensions;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.CreateUmbracoBuilder()
@@ -5,6 +7,8 @@ builder.CreateUmbracoBuilder()
     .AddWebsite()
     .AddComposers()
     .Build();
+
+builder.Services.AddTvmazeServices();
 
 WebApplication app = builder.Build();
 // trigger deployment
