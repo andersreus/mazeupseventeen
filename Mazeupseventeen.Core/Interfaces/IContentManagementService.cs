@@ -1,9 +1,10 @@
 using Mazeupseventeen.Core.Models.ApiModels;
+using Umbraco.Cms.Core.Models;
 
 namespace Mazeupseventeen.Core.Interfaces;
 
 public interface IContentManagementService
 {
-    Task CreateOrUpdateTvShowAsync(TvMazeShow show);
-    Task PublishAsync(int tvShowId);
+    void CreateOrUpdateTvShow(TvMazeShow show);
+    void Publish(IContent content);
 }

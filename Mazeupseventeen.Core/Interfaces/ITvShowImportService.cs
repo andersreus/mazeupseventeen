@@ -5,5 +5,5 @@ namespace Mazeupseventeen.Core.Interfaces;
 public interface ITvShowImportService
 {
     Task ImportAllShowsAsync();
-    Task ImportShowAsync(TvMazeShow show);
+    void ImportShow(TvMazeShow show);
 }

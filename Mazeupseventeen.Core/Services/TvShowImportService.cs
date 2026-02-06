@@ -27,7 +27,7 @@ public class TvShowImportService : ITvShowImportService
         {
             await foreach (var show in _tvMazeApiService.GetAllTvShowsAsync())
             {
-                await ImportShowAsync(show);
+                ImportShow(show);
             }
 
         }
@@ -39,8 +39,8 @@ public class TvShowImportService : ITvShowImportService
         _logger.LogInformation("Completed tv show import");
     }
 
-    public async Task ImportShowAsync(TvMazeShow show)
+    public void ImportShow(TvMazeShow show)
     {
-        await _contentManagementService.CreateOrUpdateTvShowAsync(show);
+        _contentManagementService.CreateOrUpdateTvShow(show);
     }
 }

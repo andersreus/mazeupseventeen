@@ -18,37 +18,37 @@ public class ContentManagementService : IContentManagementService
         _logger = logger;
     }
     
-    public async Task CreateOrUpdateTvShowAsync(TvMazeShow tvShow)
-    {
-        var root = GetTvShowsRoot();
-        if (root is null)
-        {
+    public void CreateOrUpdateTvShow(TvMazeShow tvShow)                                                                                                         
+    {                                                                                                                                                                      
+        var root = GetTvShowsRoot();                                                                                                                                       
+        if (root is null)                                                                                                                                                  
+        {                                                                                                                                                                  
             _logger.LogWarning("TV Shows root node not found. Cannot create content.");
             return;
         }
-        var exstingContent = FindExistingTvShow(root.Id, tvShow.Id);
+        var existingContent = FindExistingTvShow(root.Id, tvShow.Id);
 
-        IContent content;
         var contentName = string.IsNullOrWhiteSpace(tvShow.Name) ? $"Show {tvShow.Id}" : tvShow.Name;
-        
-        if (exstingContent is null)
+
+        if (existingContent is null)
         {
-            content = _contentService.Create(contentName, root.Key, "tvShow");
+            var content = _contentService.Create(contentName, root.Key, "tvShow");
+            SetTvShowProperties(content, tvShow);
+            _contentService.Save(content);
+            _logger.LogInformation("Created content with id: {Id} & name: {Name}", tvShow.Id, content.Name);
         }
-        else
+        else if (HasChanges(existingContent, tvShow, contentName))
         {
-            content = exstingContent;
-            content.Name = contentName;
+            existingContent.Name = contentName;
+            SetTvShowProperties(existingContent, tvShow);
+            _contentService.Save(existingContent);
+            _logger.LogInformation("Updated content with id: {Id} & name: {Name}", tvShow.Id, existingContent.Name);
         }
-        SetTvShowProperties(content, tvShow);
-        _contentService.Save(content);
-        
-        _logger.LogInformation($"Created content with id: {content.Id} & name: {content.Name}");
     }
 
-    public Task PublishAsync(int tvShowId)
+    public void Publish(IContent content)
     {
-        throw new NotImplementedException();
+        _contentService.Publish(content, null, -1);
     }
     
     // Helper methods, not part of the interface implementation.
@@ -68,9 +68,15 @@ public class ContentManagementService : IContentManagementService
     
     private void SetTvShowProperties(IContent content, TvMazeShow tvShow)
     {
-        // Extend model with the rest of the properties if it's working
         content.SetValue("tvMazeId", tvShow.Id);
         content.SetValue("showName", tvShow.Name);
         content.SetValue("summary", tvShow.Summary);
+    }
+    // Remember to update HasChanges if more properties are added
+    private bool HasChanges(IContent content, TvMazeShow tvShow, string contentName)
+    {
+        return content.Name != contentName ||
+               content.GetValue<string>("showName") != tvShow.Name ||
+               content.GetValue<string>("summary") != tvShow.Summary;
     }
 }
